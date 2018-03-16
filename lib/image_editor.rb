@@ -1,3 +1,4 @@
+require_relative "image"
 # ImageEditor class
 # This handles editing an Image object in various ways. Some of these methods are 
 # simply wrappers around identical methods on the Image class. As there is no
@@ -9,6 +10,15 @@ class ImageEditor
   # Error messages
   INVALID_ROW_START_END_ORDER_ERR_MSG = "Expected start row to be less than end row"
   INVALID_COL_START_END_ORDER_ERR_MSG = "Expected start column to be less than end column"
+
+
+  # Verifies if the current instance of the ImageEditor has an image associated with it
+  #
+  # * *Returns* :
+  #   - true if there is an image associated with the editor instance
+  def has_image?()
+    instance_variable_defined?("@image")
+  end
 
   # Generate a new image
   #
@@ -22,6 +32,36 @@ class ImageEditor
   def create_image(rows, cols)
     @image = Image.new(rows, cols)
   end
+
+  # Get the number of rows in the image
+  #
+  # * *Returns* :
+  #   - number of rows in the image
+  # * *Raises* :
+  #
+  def rows()
+    @image.rows
+  end
+
+  # Get the number of columns in the image
+  #
+  # * *Returns* :
+  #   - number of columns in the image
+  # * *Raises* :
+  #
+  def cols()
+    @image.cols
+  end
+
+  # Get the image as a 2D array
+  #
+  # * *Returns* :
+  #   - the image as a 2D array
+  # * *Raises* :
+  #
+  def imageGrid()
+    @image.imageGrid
+  end
   
   # Color a specific pixel (row,col) with a color
   #
@@ -34,7 +74,7 @@ class ImageEditor
   #   - +ArgumentError+ -> if the provided `color` variable is not an uppercase character
   #
   def color_pixel(row, col, color)
-    @image.color_pixel(row, col, color)
+    @image.set_pixel(row, col, color)
   end
 
   # Get the character representing the color at (row, col)
@@ -72,7 +112,7 @@ class ImageEditor
 
     # Update color for each pixel that needs to be changed
     rows.each do |row|
-      @image.color_pixel(row, col, color)
+      color_pixel(row, col, color)
     end
   end
 
@@ -97,7 +137,7 @@ class ImageEditor
 
     # Update color for each pixel that needs to be changed
       cols.each do |col|
-        @image.color_pixel(row, col, color)
+        color_pixel(row, col, color)
       end
   end
 
@@ -108,13 +148,5 @@ class ImageEditor
   end
 
 
-  private
-
-
-  # Verifies if the current instance of the ImageEditor has an image associated with it
-  #
-  def has_image?()
-    instance_variable_defined?("@image")
-  end
 
 end

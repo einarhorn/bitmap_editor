@@ -1,9 +1,10 @@
-# The Image class holds information about a 2D image. The class allows for
-# generation of the image and some basic manipulation of the pixels in the image.
+# The Image class holds information about a 2D image. Each pixel in the image
+# consists of a color, represented by a color. By default, the image consists
+# of blank pixels, represented by the character 'O'.
 class Image
 
   # Accessors for the number of rows, columns, and 2D-array representation of image
-  attr_reader :rows, :cols, :image
+  attr_reader :rows, :cols, :imageGrid
 
   # Constants
   MIN_ROW_SIZE = MIN_COL_SIZE = 1
@@ -14,10 +15,9 @@ class Image
   OUT_OF_BOUNDS_ERR_MSG = "Row or col is out of image bounds"
   OUT_OF_MAX_BOUNDS_ERR_MSG = "Row or col size is outside allowed range [1..250]"
   INVALID_COLOR_ERR_MSG = "Color is not a capital letter"
-  INVALID_ROW_START_END_ORDER_ERR_MSG = "Expected start row to be less than end row"
-  INVALID_COL_START_END_ORDER_ERR_MSG = "Expected start column to be less than end column"
 
-  # Initializes the Image class. Generates an image of rows x cols pixels, 
+
+  # Initializes the Image class. Generates an image of rows by cols pixels, 
   # where each pixel is an empty color. The empty color is represented
   # by the character 'O'. Internally, the image is stored as a 2D-array of chars.
   #
@@ -27,7 +27,8 @@ class Image
   # * *Returns* :
   #   -
   # * *Raises* :
-  #   - ++ ->
+  #   - +ArgumentError+ -> if image dimensions are outside of allowed image 
+  #                         dimensions (1 to 250 inclusive)
   #
   def initialize(rows, cols)
     # Verify rows and cols are within allowed range [1..250]
@@ -38,10 +39,10 @@ class Image
     @cols = cols
 
     # Create rows x cols grid filled with 'O's
-    @image = Array.new(rows) { Array.new(cols, DEFAULT_EMPTY_COLOR) }
+    @imageGrid = Array.new(rows) { Array.new(cols, DEFAULT_EMPTY_COLOR) }
   end
 
-  # Color a specific pixel (row,col) with a color
+  # Sets a specific pixel (row,col) to have a specific color
   #
   # * *Args*    :
   #   - +row+ -> row of the pixel that will be changed
@@ -51,10 +52,10 @@ class Image
   #   - +IndexError+ -> if either row or col is out of the bounds of the image
   #   - +ArgumentError+ -> if the provided `color` variable is not an uppercase character
   #
-  def color_pixel(row, col, color)
+  def set_pixel(row, col, color)
     raise IndexError, OUT_OF_BOUNDS_ERR_MSG if outside_curr_image_bounds?(row, col)
     raise ArgumentError, INVALID_COLOR_ERR_MSG if !is_valid_color?(color)
-    @image[row-1][col-1] = color
+    @imageGrid[row-1][col-1] = color
   end
 
   # Get the character representing the color at (row, col)
@@ -69,73 +70,18 @@ class Image
   #
   def get_pixel(row, col)
     raise IndexError, OUT_OF_BOUNDS_ERR_MSG if outside_curr_image_bounds?(row, col)
-    @image[row-1][col-1]
+    @imageGrid[row-1][col-1]
   end
 
   # Print out the image as a 2d grid to standard output
   #
   def show()
-    @image.each { |x|
+    @imageGrid.each { |x|
       puts x.join(" ")
     }
   end
 
-  # Draw a vertical segment of color in colomn col between rowStart and rowEnd (inclusive)
-  #
-  # * *Args*    :
-  #   - +col+ -> column in which to draw the vertical segment
-  #   - +rowStart+ -> starting row of the vertical segment
-  #   - +rowEnd+ -> ending row of the vertical segment
-  #   - +color+ -> color of the vertical segment
-  # * *Raises* :
-  #   - +IndexError+ -> if any portion of the vertical segment would be out of the bounds of the image
-  #   - +ArgumentError+ -> if the provided `color` variable is not an uppercase character
-  #   - +ArgumentError+ -> if the starting row of the segnment is greater than the ending row
-  #
-  def draw_vertical_segment(col, rowStart, rowEnd, color)
-    is_out_of_bounds = outside_curr_image_bounds?(rowStart, col) || outside_curr_image_bounds?(rowEnd, col)
-    raise IndexError, OUT_OF_BOUNDS_ERR_MSG if is_out_of_bounds
-    raise ArgumentError, INVALID_COLOR_ERR_MSG if !is_valid_color?(color)
-    raise ArgumentError, INVALID_ROW_START_END_ORDER_ERR_MSG if rowStart > rowEnd
-    
-    # Convert start and end values to a continuous array
-    # e.g. rowStart = 1, rowEnd = 3 => rows = [1,2,3]
-    rows = (rowStart..rowEnd).to_a
-
-    # Update color for each pixel that needs to be changed
-    rows.each do |row|
-      @image[row-1][col-1] = color
-    end
-  end
-
-  # Draw a horizontal segment of color in given row between colStart and colEnd (inclusive)
-  #
-  # * *Args*    :
-  #   - +row+ -> row in which to draw the horizontal segment
-  #   - +colStart+ -> starting column of the horizontal segment
-  #   - +colEnd+ -> ending column of the horizontal segment
-  #   - +color+ -> color of the horizontal segment
-  # * *Raises* :
-  #   - +IndexError+ -> if any portion of the horizontal segment would be out of the bounds of the image
-  #   - +ArgumentError+ -> if the provided `color` variable is not an uppercase character
-  #   - +ArgumentError+ -> if the starting column of the segnment is greater than the ending column
-  #
-  def draw_horizontal_segment(row, colStart, colEnd, color)
-    is_out_of_bounds = outside_curr_image_bounds?(row, colStart) || outside_curr_image_bounds?(row, colEnd)
-    raise IndexError, OUT_OF_BOUNDS_ERR_MSG if is_out_of_bounds
-    raise ArgumentError, INVALID_COLOR_ERR_MSG if !is_valid_color?(color)
-    raise ArgumentError, INVALID_COL_START_END_ORDER_ERR_MSG if colStart > colEnd
-
-    # Convert start and end values to a continuous array
-    # e.g. colStart = 1, colEnd = 3 => cols = [1,2,3]
-    cols = (colStart..colEnd).to_a
-
-    # Update color for each pixel that needs to be changed
-    cols.each do |col|
-      @image[row-1][col-1] = color
-    end
-  end
-
+ 
 
 
 
