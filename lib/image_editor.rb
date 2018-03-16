@@ -1,5 +1,5 @@
 require_relative "image"
-require_relative "exceptions/missing_image_exception"
+require_relative "exceptions/missing_image_error"
 
 # ImageEditor class
 # This handles editing an Image object in various ways. Some of these methods are 

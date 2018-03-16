@@ -1,6 +1,6 @@
 
 require_relative "../lib/image_editor"
-require_relative "../lib/exceptions/missing_image_exception"
+require_relative "../lib/exceptions/missing_image_error"
 require "test/unit"
  
 # As several of the methods in the ImageEditor class are simply wrappers
