@@ -1,4 +1,6 @@
 require_relative "image"
+require_relative "exceptions/missing_image_exception"
+
 # ImageEditor class
 # This handles editing an Image object in various ways. Some of these methods are 
 # simply wrappers around identical methods on the Image class. As there is no
@@ -10,7 +12,6 @@ class ImageEditor
   # Error messages
   INVALID_ROW_START_END_ORDER_ERR_MSG = "Expected start row to be less than end row"
   INVALID_COL_START_END_ORDER_ERR_MSG = "Expected start column to be less than end column"
-
 
   # Verifies if the current instance of the ImageEditor has an image associated with it
   #
@@ -38,8 +39,10 @@ class ImageEditor
   # * *Returns* :
   #   - number of rows in the image
   # * *Raises* :
+  #   - +MissingImageError+ -> if no image is associated with this image editor
   #
   def rows()
+    raise MissingImageError if !has_image?()
     @image.rows
   end
 
@@ -48,8 +51,10 @@ class ImageEditor
   # * *Returns* :
   #   - number of columns in the image
   # * *Raises* :
+  #   - +MissingImageError+ -> if no image is associated with this image editor
   #
   def cols()
+    raise MissingImageError if !has_image?()
     @image.cols
   end
 
@@ -58,8 +63,10 @@ class ImageEditor
   # * *Returns* :
   #   - the image as a 2D array
   # * *Raises* :
+  #   - +MissingImageError+ -> if no image is associated with this image editor
   #
   def imageGrid()
+    raise MissingImageError if !has_image?()
     @image.imageGrid
   end
   
@@ -70,10 +77,12 @@ class ImageEditor
   #   - +col+ -> column of the pixel that will be changed
   #   - +color+ -> character representation of the new color for the pixel
   # * *Raises* :
+  #   - +MissingImageError+ -> if no image is associated with this image editor
   #   - +IndexError+ -> if either row or col is out of the bounds of the image
   #   - +ArgumentError+ -> if the provided `color` variable is not an uppercase character
   #
   def color_pixel(row, col, color)
+    raise MissingImageError if !has_image?()
     @image.set_pixel(row, col, color)
   end
 
@@ -85,9 +94,11 @@ class ImageEditor
   # * *Returns* :
   #   - a character representing the color at (row, col)
   # * *Raises* :
+  #   - +MissingImageError+ -> if no image is associated with this image editor
   #   - +IndexError+ -> if either row or col is out of the bounds of the image
   #
   def get_pixel(row, col)
+    raise MissingImageError if !has_image?()
     @image.get_pixel(row, col)
   end
 
@@ -99,11 +110,13 @@ class ImageEditor
   #   - +rowEnd+ -> ending row of the vertical segment
   #   - +color+ -> color of the vertical segment
   # * *Raises* :
+  #   - +MissingImageError+ -> if no image is associated with this image editor
   #   - +IndexError+ -> if any portion of the vertical segment would be out of the bounds of the image
   #   - +ArgumentError+ -> if the provided `color` variable is not an uppercase character
   #   - +ArgumentError+ -> if the starting row of the segnment is greater than the ending row
   #
   def draw_vertical_segment(col, rowStart, rowEnd, color)
+    raise MissingImageError if !has_image?()
     raise ArgumentError, INVALID_ROW_START_END_ORDER_ERR_MSG if rowStart > rowEnd
     
     # Convert start and end values to a continuous array
@@ -124,11 +137,13 @@ class ImageEditor
   #   - +colEnd+ -> ending column of the horizontal segment
   #   - +color+ -> color of the horizontal segment
   # * *Raises* :
+  #   - +MissingImageError+ -> if no image is associated with this image editor
   #   - +IndexError+ -> if any portion of the horizontal segment would be out of the bounds of the image
   #   - +ArgumentError+ -> if the provided `color` variable is not an uppercase character
   #   - +ArgumentError+ -> if the starting column of the segnment is greater than the ending column
   #
   def draw_horizontal_segment(row, colStart, colEnd, color)
+    raise MissingImageError if !has_image?()
     raise ArgumentError, INVALID_COL_START_END_ORDER_ERR_MSG if colStart > colEnd
 
     # Convert start and end values to a continuous array
@@ -143,7 +158,11 @@ class ImageEditor
 
   # Print out the image as a 2d grid to standard output
   #
+  # * *Raises* :
+  #   - +MissingImageError+ -> if no image is associated with this image editor
+  #
   def show()
+    raise MissingImageError if !has_image?()
     @image.show()
   end
 

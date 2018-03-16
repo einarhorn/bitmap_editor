@@ -1,5 +1,6 @@
 
 require_relative "../lib/image_editor"
+require_relative "../lib/exceptions/missing_image_exception"
 require "test/unit"
  
 # As several of the methods in the ImageEditor class are simply wrappers
@@ -8,13 +9,21 @@ require "test/unit"
 # be tested for the success case and 'image not created' case in this class.
 # Methods which implement new features in the ImageEditor class are tested
 # in full here.
+# The new methods that are tested in full here:
+#   has_image?
+#   draw_vertical_segment
+#   draw_horizontal_segment
+#   
 class TestImageEditor < Test::Unit::TestCase
  
   # Tests: Initialization of ImageEditor
+
   def test_initialization_successful
     editor = ImageEditor.new()
     assert_equal(false, editor.has_image?)
   end
+
+  # Tests: create_image
 
   def test_create_image_successful
     editor = ImageEditor.new()
@@ -28,6 +37,68 @@ class TestImageEditor < Test::Unit::TestCase
     assert_equal(expected_img_grid, editor.imageGrid)
   end
 
+  # Tests: has_image?
+  def test_has_image_successful
+    editor = ImageEditor.new()
+    assert_equal(false, editor.has_image?())
+
+    # Create image
+    editor.create_image(5, 5)
+    assert_equal(true, editor.has_image?())
+  end
+
+  # Tests: rows
+
+  def test_rows_successful
+    editor = ImageEditor.new()
+    editor.create_image(5,7)
+    assert_equal(5, editor.rows)
+  end
+
+  def test_rows_throws_on_missing_image
+    editor = ImageEditor.new()
+    assert_raise(MissingImageError) do
+      editor.rows
+    end
+  end
+
+  # Tests: cols
+
+  def test_cols_successful
+    editor = ImageEditor.new()
+    editor.create_image(5,7)
+    assert_equal(7, editor.cols)
+  end
+
+  def test_cols_throws_on_missing_image
+    editor = ImageEditor.new()
+    assert_raise(MissingImageError) do
+      editor.cols
+    end
+  end
+
+  # Tests: imageGrid
+
+  def test_imageGrid_successful
+    editor = ImageEditor.new()
+    editor.create_image(5,5)
+    expected_img_grid = Array[
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O']
+    ]
+    assert_equal(expected_img_grid, editor.imageGrid)
+  end
+
+  def test_imageGrid_throws_on_missing_image
+    editor = ImageEditor.new()
+    assert_raise(MissingImageError) do
+      editor.imageGrid
+    end
+  end
+
   # Tests: get_pixel
 
   def test_get_pixel
@@ -39,12 +110,19 @@ class TestImageEditor < Test::Unit::TestCase
     assert_equal('O', editor.get_pixel(1, 4))
     assert_equal('O', editor.get_pixel(1, 5))
 
-    # get_pixel(row, col) should be equal to editor.image[row-1][col-1]
+    # get_pixel(row, col) should be equal to editor.imageGrid[row-1][col-1]
     assert_equal(editor.imageGrid[1][0], editor.get_pixel(2, 1))
     assert_equal(editor.imageGrid[1][1], editor.get_pixel(2, 2))
     assert_equal(editor.imageGrid[1][2], editor.get_pixel(2, 3))
     assert_equal(editor.imageGrid[1][3], editor.get_pixel(2, 4))
     assert_equal(editor.imageGrid[1][4], editor.get_pixel(2, 5))
+  end
+
+  def test_get_pixel_throws_on_missing_image
+    editor = ImageEditor.new()
+    assert_raise(MissingImageError) do
+      editor.get_pixel(1, 1)
+    end
   end
 
   # Tests: color_pixel
@@ -58,6 +136,13 @@ class TestImageEditor < Test::Unit::TestCase
     # Color pixel
     editor.color_pixel(row, col,'A')
     assert_equal('A', editor.get_pixel(row, col))
+  end
+
+  def test_color_pixel_throws_on_missing_image
+    editor = ImageEditor.new()
+    assert_raise(MissingImageError) do
+      editor.color_pixel(1, 1, 'A')
+    end
   end
 
   # Tests: draw_vertical_segment
@@ -158,6 +243,13 @@ class TestImageEditor < Test::Unit::TestCase
     end
   end
 
+  def test_draw_vertical_segment_throws_on_missing_image
+    editor = ImageEditor.new()
+    assert_raise(MissingImageError) do
+      editor.draw_vertical_segment(1, 1, 2, 'A')
+    end
+  end
+
   # Tests: draw_horizontal_segment
   
   def test_draw_horizontal_segment_successful
@@ -253,6 +345,13 @@ class TestImageEditor < Test::Unit::TestCase
     col_end = 1
     assert_raise(ArgumentError) do
       editor.draw_horizontal_segment(1, col_start, col_end, 'z')
+    end
+  end
+
+  def test_draw_horizontal_segment_throws_on_missing_image
+    editor = ImageEditor.new()
+    assert_raise(MissingImageError) do
+      editor.draw_horizontal_segment(1, 1, 2, 'A')
     end
   end
 
