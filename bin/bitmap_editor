@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
-require './lib/bitmap_editor'
+require './lib/input_parse'
 
-BitmapEditor.new.run ARGV.first
+InputParse.new.run ARGV.first
