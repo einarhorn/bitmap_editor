@@ -11,6 +11,9 @@ class InputParse
   INCORRECT_NUMBER_OF_ARGS_ERR_MSG = "Incorrect number of arguments"
   INVALID_FILE_ERR_MSG = "Please provide correct file"
 
+  # General command
+  COMMAND_IDX = 0
+
   # Create Image
   CREATE_IMG_COMMAND = 'I'
   CREATE_IMG_PARAM_COUNT = 3
@@ -90,14 +93,14 @@ class InputParse
   #
   # * *Args*    :
   #   - +split_input+ -> command to execute, as an array of strings.
-  #                      split_input[0] is the letter representing the operation
+  #                      split_input[COMMAND_IDX] is the letter representing the operation
   #                      The rest of the items in array are args for the operation
   # * *Raises* :
   #   - +InvalidCommandError+ -> if input is not in the expected format
   #   - +UnrecognisedCommandError+ -> if operation could not be determined
   #
   def execute_line(split_input)
-    case split_input[0]
+    case split_input[COMMAND_IDX]
     when CREATE_IMG_COMMAND
       create_image(split_input)
     when CLEAR_IMG_COMMAND
@@ -119,8 +122,8 @@ class InputParse
   #
   # * *Args*    :
   #   - +split_input+ -> array of strings.
-  #                      split_input[1] is number of columns
-  #                      split_input[2] is number of rows
+  #                      split_input[CREATE_IMG_PARAM_COLS_IDX] is number of columns
+  #                      split_input[CREATE_IMG_PARAM_ROWS_IDX] is number of rows
   # * *Raises* :
   #   - +InvalidCommandError+ -> if input is not in the format "I N M", where
   #                               N and M are integers
