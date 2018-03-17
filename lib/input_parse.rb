@@ -132,7 +132,7 @@ class InputParse
   #
   def create_image(split_input)
     begin
-      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != CREATE_IMG_PARAM_COUNT
+      validate_param_count(split_input, CREATE_IMG_PARAM_COUNT)
       cols = Integer(split_input[CREATE_IMG_PARAM_COLS_IDX])
       rows = Integer(split_input[CREATE_IMG_PARAM_ROWS_IDX])
       @editor.create_image(rows, cols)
@@ -150,7 +150,7 @@ class InputParse
   #
   def clear_image(split_input)
     begin
-      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != CLEAR_IMG_PARAM_COUNT
+      validate_param_count(split_input, CLEAR_IMG_PARAM_COUNT)
       @editor.clear_image()
     rescue ArgumentError, MissingImageError => e
       raise InvalidCommandError, e.message
@@ -167,7 +167,7 @@ class InputParse
   #
   def color_pixel(split_input)
     begin
-      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != COLOUR_PIXEL_PARAM_COUNT
+      validate_param_count(split_input, COLOUR_PIXEL_PARAM_COUNT)
       col = Integer(split_input[COLOUR_PIXEL_PARAM_COL_IDX])
       row = Integer(split_input[COLOUR_PIXEL_PARAM_ROW_IDX])
       color = split_input[COLOUR_PIXEL_PARAM_COLOR_IDX]
@@ -187,7 +187,7 @@ class InputParse
   #
   def draw_vertical_segment(split_input)
     begin
-      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != DRAW_VERTICAL_PARAM_COUNT
+      validate_param_count(split_input, DRAW_VERTICAL_PARAM_COUNT)
       col = Integer(split_input[DRAW_VERTICAL_COL_IDX])
       rowStart = Integer(split_input[DRAW_VERTICAL_ROW_START_IDX])
       rowEnd = Integer(split_input[DRAW_VERTICAL_ROW_END_IDX])
@@ -208,7 +208,7 @@ class InputParse
   #
   def draw_horizontal_segment(split_input)
     begin
-      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != DRAW_HORIZONTAL_PARAM_COUNT
+      validate_param_count(split_input, DRAW_HORIZONTAL_PARAM_COUNT)
       colStart = Integer(split_input[DRAW_HORIZONTAL_COL_START_IDX])
       colEnd = Integer(split_input[DRAW_HORIZONTAL_COL_END_IDX])
       row = Integer(split_input[DRAW_HORIZONTAL_ROW_IDX])
@@ -228,13 +228,25 @@ class InputParse
   #
   def show(split_input)
     begin
-      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != SHOW_COMMAND_PARAM_COUNT
+      validate_param_count(split_input, SHOW_COMMAND_PARAM_COUNT)
       @editor.show()
     rescue ArgumentError, MissingImageError => e
       raise InvalidCommandError, e.message
     end
   end
 
-
+  # Validates that a given array has an expected size
+  #
+  # * *Args*    :
+  #   - +input_array+ -> array of strings.
+  #   - +expected_size+ -> expected size of array.
+  # * *Raises* :
+  #   - +ArgumentError+ -> if array size does not match expected size
+  #
+  def validate_param_count(input_array, expected_size)
+    if input_array.length != expected_size
+      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG
+    end
+  end
 end
   
