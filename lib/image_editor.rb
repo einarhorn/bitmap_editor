@@ -10,8 +10,6 @@ require_relative "exceptions/missing_image_error"
 class ImageEditor
 
   # Error messages
-  INVALID_ROW_START_END_ORDER_ERR_MSG = "Expected start row to be less than end row"
-  INVALID_COL_START_END_ORDER_ERR_MSG = "Expected start column to be less than end column"
   OUT_OF_BOUNDS_ERR_MSG = "Attempted to color a part of the image which is out of bounds"
 
   # Verifies if the current instance of the ImageEditor has an image associated with it
@@ -78,7 +76,7 @@ class ImageEditor
   #
   def clear_image()
     validate_editor_has_image()
-    create_image(rows, cols)
+    create_image(@rows, @cols)
   end
 
   # Color a specific pixel (row,col) with a color
@@ -124,7 +122,6 @@ class ImageEditor
   #   - +MissingImageError+ -> if no image is associated with this image editor
   #   - +IndexError+ -> if any portion of the vertical segment would be out of the bounds of the image
   #   - +ArgumentError+ -> if the provided `color` variable is not an uppercase character
-  #   - +ArgumentError+ -> if the starting row of the segnment is greater than the ending row
   #
   def draw_vertical_segment(col, rowStart, rowEnd, color)
     validate_editor_has_image()
@@ -133,11 +130,14 @@ class ImageEditor
     then
       raise IndexError, OUT_OF_BOUNDS_ERR_MSG
     end
-    raise ArgumentError, INVALID_ROW_START_END_ORDER_ERR_MSG if rowStart > rowEnd
     
+    # Order the start and end rows
+    minRow = [rowStart,rowEnd].min
+    maxRow = [rowStart,rowEnd].max
+
     # Convert start and end values to a continuous array
     # e.g. rowStart = 1, rowEnd = 3 => rows = [1,2,3]
-    rows = (rowStart..rowEnd).to_a
+    rows = (minRow..maxRow).to_a
 
     # Update color for each pixel that needs to be changed
     rows.each do |row|
@@ -156,7 +156,6 @@ class ImageEditor
   #   - +MissingImageError+ -> if no image is associated with this image editor
   #   - +IndexError+ -> if any portion of the horizontal segment would be out of the bounds of the image
   #   - +ArgumentError+ -> if the provided `color` variable is not an uppercase character
-  #   - +ArgumentError+ -> if the starting column of the segnment is greater than the ending column
   #
   def draw_horizontal_segment(row, colStart, colEnd, color)
     validate_editor_has_image()
@@ -165,11 +164,14 @@ class ImageEditor
     then
       raise IndexError, OUT_OF_BOUNDS_ERR_MSG
     end
-    raise ArgumentError, INVALID_COL_START_END_ORDER_ERR_MSG if colStart > colEnd
 
+    # Order the start and end cols
+    minCol = [colStart,colEnd].min
+    maxCol = [colStart,colEnd].max
+    
     # Convert start and end values to a continuous array
     # e.g. colStart = 1, colEnd = 3 => cols = [1,2,3]
-    cols = (colStart..colEnd).to_a
+    cols = (minCol..maxCol).to_a
 
     # Update color for each pixel that needs to be changed
       cols.each do |col|
