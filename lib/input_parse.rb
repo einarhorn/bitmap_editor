@@ -83,6 +83,8 @@ class InputParse
         execute_line(split_line)
       rescue UnrecognisedCommandError, InvalidCommandError => e
         puts line << ": " << e.message
+      rescue Exception
+        puts "Unknown error occured"
       end
     end
   end
