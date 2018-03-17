@@ -1,0 +1,15 @@
+H 1 2 3 A
+I 5 5
+H
+H 1
+H 1 2
+H 1 2 3
+Ha 1 2 3 A
+H 1a 2 3 A
+H 1 2a 3 A
+H 1 2 3a A
+H 1 2 3 Aa
+H 1 2 3 1
+H 1 2 3 A a
+H 1 2 3 A 1
+H 7 2 3 A

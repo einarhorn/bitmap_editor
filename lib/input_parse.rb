@@ -27,7 +27,7 @@ class InputParse
       
       begin
         execute_line(split_line)
-      rescue ArgumentError, IndexError => e
+      rescue ArgumentError, IndexError, MissingImageError => e
         puts e.message
       end
 
@@ -52,6 +52,7 @@ class InputParse
       draw_vertical_segment(split_input)
     when 'H'
       puts 'Horizontal'
+      draw_horizontal_segment(split_input)
     when 'S'
       puts "Show"
     else
@@ -107,6 +108,22 @@ class InputParse
     @editor.draw_vertical_segment(col, rowStart, rowEnd, color)
   end
 
+  # Draw a horizontal segment of colour C in row Y between columns X1 and X2 (inclusive).
+  #
+  # * *Args*    :
+  #   - +split_input+ -> array of strings
+  # * *Raises* :
+  #   - +ArgumentError+ -> if input is not in the format "H X1 X2 Y C ", where
+  #                         X, Y1, Y2 are integers, C is an uppercase character
+  #
+  def draw_horizontal_segment(split_input)
+    raise ArgumentError if split_input.length != 5
+    colStart = Integer(split_input[1])
+    colEnd = Integer(split_input[2])
+    row = Integer(split_input[3])
+    color = split_input[4]
+    @editor.draw_horizontal_segment(row, colStart, colEnd, color)
+  end
 
 
 end

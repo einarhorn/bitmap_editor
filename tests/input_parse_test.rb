@@ -62,6 +62,7 @@ class TestInputParse < Test::Unit::TestCase
   end
 
   # Test file has the instruction:
+  #   L 1 2 A
   #   I 5 5
   #   L
   #   L 1
@@ -99,6 +100,7 @@ class TestInputParse < Test::Unit::TestCase
   end
 
   # Test file has the instruction:
+  #    V 1 2 3 A
   #    I 5 5
   #    V
   #    V 1
@@ -116,6 +118,57 @@ class TestInputParse < Test::Unit::TestCase
   def test_draw_vertical_segment_fails_on_invalid_input
     parser = InputParse.new()
     parser.run("tests/test_files/draw_vertical_segment_invalid.txt")
+    
+    # Image is successfully created..
+    assert_equal(true, parser.editor.has_image?())
+
+    # ..but none of the pixels have been changed
+    expected_img_grid = Array[
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O']
+    ]
+    assert_equal(expected_img_grid, parser.editor.imageGrid)
+  end
+
+  # Test file has the instruction:
+  #   I 5 5
+  #   H 1 2 3 A
+  def test_draw_horizontal_segment_successful
+    parser = InputParse.new()
+    parser.run("tests/test_files/draw_horizontal_segment_valid.txt")
+    assert_equal(true, parser.editor.has_image?())
+    expected_img_grid = Array[
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['A', 'A', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O']
+    ]
+    assert_equal(expected_img_grid, parser.editor.imageGrid)
+  end
+
+  # Test file has the instruction:
+  #   H 1 2 3 A
+  #   I 5 5
+  #   H
+  #   H 1
+  #   H 1 2
+  #   H 1 2 3
+  #   Ha 1 2 3 A
+  #   H 1a 2 3 A
+  #   H 1 2a 3 A
+  #   H 1 2 3a A
+  #   H 1 2 3 Aa
+  #   H 1 2 3 1
+  #   H 1 2 3 A a
+  #   H 1 2 3 A 1
+  #   H 7 2 3 A
+  def test_draw_horizontal_segment_fails_on_invalid_input
+    parser = InputParse.new()
+    parser.run("tests/test_files/draw_horizontal_segment_invalid.txt")
     
     # Image is successfully created..
     assert_equal(true, parser.editor.has_image?())
