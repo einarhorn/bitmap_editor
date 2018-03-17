@@ -65,15 +65,17 @@ class InputParse
   # Create a new M x N image with all pixels coloured white ('O').
   #
   # * *Args*    :
-  #   - +split_input+ -> array of strings
+  #   - +split_input+ -> array of strings.
+  #                      split_input[1] is number of columns
+  #                      split_input[2] is number of rows
   # * *Raises* :
   #   - +ArgumentError+ -> if input is not in the format "I N M", where
   #                         N and M are integers
   #
   def create_image(split_input)
     raise ArgumentError if split_input.length != 3
-    rows = Integer(split_input[1])
-    cols = Integer(split_input[2])
+    cols = Integer(split_input[1])
+    rows = Integer(split_input[2])
     @editor.create_image(rows, cols)
   end
 
@@ -88,7 +90,6 @@ class InputParse
     raise ArgumentError if split_input.length != 1
     @editor.clear_image()
   end
-
 
   # Colours the pixel (X,Y) with colour C.
   #

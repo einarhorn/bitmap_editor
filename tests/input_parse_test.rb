@@ -22,15 +22,14 @@ class TestInputParse < Test::Unit::TestCase
     assert_equal(false, parser.editor.has_image?())
   end
 
+  # Test file has the instruction:
+  #   "I 4 5"
   def test_create_image_successful
     parser = InputParse.new()
     parser.run("tests/test_files/create_image_valid.txt")
     assert_equal(true, parser.editor.has_image?())
-
-    # Test file has the instruction:
-    #   "I 4 5"
-    assert_equal(4, parser.editor.rows)
-    assert_equal(5, parser.editor.cols)
+    assert_equal(5, parser.editor.rows)
+    assert_equal(4, parser.editor.cols)
   end
 
   # Test file has the instruction:
