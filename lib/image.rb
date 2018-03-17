@@ -81,8 +81,23 @@ class Image
     }
   end
 
- 
-
+  # Check if (row, col) is outside of this image's bounds
+  #
+  # * *Args*    :
+  #   - +row+ -> row to check
+  #   - +col+ -> column to check
+  # * *Returns* :
+  #   - true if row or column is outside the maximum bounds for this image
+  #
+  def outside_curr_image_bounds?(row, col)
+    if row <= 0 or row > @rows
+      true
+    elsif col <= 0 or col > @cols
+      true
+    else
+      false
+    end
+  end
 
 
   # NOTE: Everything from here below are private methods
@@ -106,23 +121,7 @@ class Image
     end
   end
 
-  # Check if (row, col) is outside of this image's bounds
-  #
-  # * *Args*    :
-  #   - +row+ -> row to check
-  #   - +col+ -> column to check
-  # * *Returns* :
-  #   - true if row or column is outside the maximum bounds for this image
-  #
-  def outside_curr_image_bounds?(row, col)
-    if row <= 0 or row > @rows
-      true
-    elsif col <= 0 or col > @cols
-      true
-    else
-      false
-    end
-  end
+
 
   # Check if the character representing a color is a capital letter
   #

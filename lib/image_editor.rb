@@ -12,6 +12,7 @@ class ImageEditor
   # Error messages
   INVALID_ROW_START_END_ORDER_ERR_MSG = "Expected start row to be less than end row"
   INVALID_COL_START_END_ORDER_ERR_MSG = "Expected start column to be less than end column"
+  OUT_OF_BOUNDS_ERR_MSG = "Attempted to color a part of the image which is out of bounds"
 
   # Verifies if the current instance of the ImageEditor has an image associated with it
   #
@@ -127,6 +128,11 @@ class ImageEditor
   #
   def draw_vertical_segment(col, rowStart, rowEnd, color)
     validate_editor_has_image()
+    if @image.outside_curr_image_bounds?(rowStart, col) or 
+       @image.outside_curr_image_bounds?(rowEnd, col)
+    then
+      raise IndexError, OUT_OF_BOUNDS_ERR_MSG
+    end
     raise ArgumentError, INVALID_ROW_START_END_ORDER_ERR_MSG if rowStart > rowEnd
     
     # Convert start and end values to a continuous array
@@ -154,6 +160,11 @@ class ImageEditor
   #
   def draw_horizontal_segment(row, colStart, colEnd, color)
     validate_editor_has_image()
+    if @image.outside_curr_image_bounds?(row, colStart) or 
+       @image.outside_curr_image_bounds?(row, colEnd)
+    then
+      raise IndexError, OUT_OF_BOUNDS_ERR_MSG
+    end
     raise ArgumentError, INVALID_COL_START_END_ORDER_ERR_MSG if colStart > colEnd
 
     # Convert start and end values to a continuous array
@@ -177,7 +188,7 @@ class ImageEditor
   end
 
   private 
-  
+
   # Validate that editor instance has an image associated with it
   #
   # * *Raises* :
