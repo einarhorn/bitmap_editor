@@ -7,8 +7,6 @@ describe Image do
   
   describe "#initialize" do
     context "given a valid row/col pair" do
-
-
       it "returns the correct row value" do
         expect(image.rows).to eql(5)
       end
@@ -66,7 +64,6 @@ describe Image do
       expect {image.get_pixel(7, 2)}.to raise_error IndexError
       expect {image.get_pixel(0, 0)}.to raise_error IndexError
     end
-
   end
 
   describe "#outside_curr_image_bounds?" do
@@ -81,6 +78,13 @@ describe Image do
       expect(image.outside_curr_image_bounds?(-1,0)).to eql true
       expect(image.outside_curr_image_bounds?(3,8)).to eql true
       expect(image.outside_curr_image_bounds?(8,3)).to eql true
+    end
+  end
+
+  describe "#show" do
+    it "outputs image as 2d grid to stdout" do
+      expected_grid = "O O O O O O\n" * 5
+      expect{image.show}.to output(expected_grid).to_stdout
     end
   end
 end
