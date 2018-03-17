@@ -1,10 +1,10 @@
 class UnrecognisedCommandError < StandardError
 
-    EXCEPTION_MSG = "This command could not be recognised."
+  EXCEPTION_MSG = "Command could not be recognised."
 
-    def initialize()
-      super(EXCEPTION_MSG)
-    end
-
+  def initialize()
+    super(EXCEPTION_MSG)
   end
+
+end
   
