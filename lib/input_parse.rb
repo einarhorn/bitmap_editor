@@ -55,6 +55,7 @@ class InputParse
       draw_horizontal_segment(split_input)
     when 'S'
       puts "Show"
+      show(split_input)
     else
       puts 'Unrecognised command'
     end
@@ -123,6 +124,18 @@ class InputParse
     row = Integer(split_input[3])
     color = split_input[4]
     @editor.draw_horizontal_segment(row, colStart, colEnd, color)
+  end
+
+  # Show the contents of the current image
+  #
+  # * *Args*    :
+  #   - +split_input+ -> array of strings
+  # * *Raises* :
+  #   - +ArgumentError+ -> if input is not in the format "S"
+  #
+  def show(split_input)
+    raise ArgumentError if split_input.length != 1
+    @editor.show()
   end
 
 

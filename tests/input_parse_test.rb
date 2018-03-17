@@ -184,4 +184,15 @@ class TestInputParse < Test::Unit::TestCase
     assert_equal(expected_img_grid, parser.editor.imageGrid)
   end
 
+  # Test file has the instruction:
+  #   I 5 5
+  #   S
+  # Note: Unsure how to test against stdout, so no testcase for the failed situation
+  def test_show_successful
+    parser = InputParse.new()
+    parser.run("tests/test_files/show_valid.txt")
+    assert_equal(true, parser.editor.has_image?())
+  end
+
+
 end
