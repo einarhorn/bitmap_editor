@@ -53,6 +53,50 @@ class TestInputParse < Test::Unit::TestCase
   
   # Test file has the instruction:
   #   I 5 5
+  #   L 1 2 A
+  #   C
+  def test_clear_image_successful
+    parser = InputParse.new()
+    parser.run("tests/test_files/clear_image_valid.txt")
+    assert_equal(true, parser.editor.has_image?())
+    expected_img_grid = Array[
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O']
+    ]
+    assert_equal(expected_img_grid, parser.editor.imageGrid)
+  end
+
+  # Test file has the instruction:
+  #   C
+  #   I 5 5
+  #   C 1
+  #   L 1 2 A
+  #   L 2 3 A
+  #   C 1
+  #   Ca
+  def test_clear_image_fails_on_invalid_input
+    parser = InputParse.new()
+    parser.run("tests/test_files/clear_image_invalid.txt")
+    
+    # Image is successfully created..
+    assert_equal(true, parser.editor.has_image?())
+
+    # ..but the image has not been reset (Line 4 and 5 in input color the image)
+    expected_img_grid = Array[
+      ['O', 'A', 'O', 'O', 'O'],
+      ['O', 'O', 'A', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O']
+    ]
+    assert_equal(expected_img_grid, parser.editor.imageGrid)
+  end
+
+  # Test file has the instruction:
+  #   I 5 5
   #   L 2 2 A
   def test_color_pixel_successful
     parser = InputParse.new()

@@ -44,6 +44,7 @@ class InputParse
       create_image(split_input)
     when 'C'
       puts 'Clears'
+      clear_image(split_input)
     when 'L'
       puts 'Color'
       color_pixel(split_input)
@@ -75,6 +76,19 @@ class InputParse
     cols = Integer(split_input[2])
     @editor.create_image(rows, cols)
   end
+
+  # Clears the table, setting all pixels to white (O).
+  #
+  # * *Args*    :
+  #   - +split_input+ -> array of strings
+  # * *Raises* :
+  #   - +ArgumentError+ -> if input is not in the format "C"
+  #
+  def clear_image(split_input)
+    raise ArgumentError if split_input.length != 1
+    @editor.clear_image()
+  end
+
 
   # Colours the pixel (X,Y) with colour C.
   #
