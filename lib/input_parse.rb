@@ -1,7 +1,8 @@
 require_relative "image_editor"
 # This class iterates through the input file, and executes the commands in the
 # order they are presented in the file. Invalid lines are ignored and print out
-# error messages to stdout.
+# error messages to stdout. This class only handles validation of types (e.g. Integer)
+# and does not do any validation of values.
 class InputParse
 
   # For testing purposes, make this accessible
@@ -45,6 +46,7 @@ class InputParse
       puts 'Clears'
     when 'L'
       puts 'Color'
+      color_pixel(split_input)
     when 'V'
       puts 'Vertical'
     when 'H'
@@ -56,7 +58,7 @@ class InputParse
     end
   end
 
-  # Creates a new blank image
+  # Create a new M x N image with all pixels coloured white ('O').
   #
   # * *Args*    :
   #   - +split_input+ -> array of strings
@@ -69,6 +71,22 @@ class InputParse
     rows = Integer(split_input[1])
     cols = Integer(split_input[2])
     @editor.create_image(rows, cols)
+  end
+
+  # Colours the pixel (X,Y) with colour C.
+  #
+  # * *Args*    :
+  #   - +split_input+ -> array of strings
+  # * *Raises* :
+  #   - +ArgumentError+ -> if input is not in the format "L X Y C", where
+  #                         X and Y are integers, C is an uppercase character
+  #
+  def color_pixel(split_input)
+    raise ArgumentError if split_input.length != 4
+    row = Integer(split_input[1])
+    col = Integer(split_input[2])
+    color = String(split_input[3])
+    @editor.color_pixel(row, col, color)
   end
 
 

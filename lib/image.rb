@@ -132,6 +132,6 @@ class Image
   #   - true if the character representing a color is a capital letter
   #
   def is_valid_color?(color)
-    color == color.upcase and color.length == 1
+    color == color.upcase and color.length == 1 and color =~ /[[:alpha:]]/
   end
 end
