@@ -141,7 +141,7 @@ class InputParse
   # * *Args*    :
   #   - +split_input+ -> array of strings
   # * *Raises* :
-  #   - +ArgumentError+ -> if input is not in the format "C"
+  #   - +InvalidCommandError+ -> if input is not in the format "C"
   #
   def clear_image(split_input)
     begin
@@ -157,7 +157,7 @@ class InputParse
   # * *Args*    :
   #   - +split_input+ -> array of strings
   # * *Raises* :
-  #   - +ArgumentError+ -> if input is not in the format "L X Y C", where
+  #   - +InvalidCommandError+ -> if input is not in the format "L X Y C", where
   #                         X and Y are integers, C is an uppercase character
   #
   def color_pixel(split_input)
@@ -177,7 +177,7 @@ class InputParse
   # * *Args*    :
   #   - +split_input+ -> array of strings
   # * *Raises* :
-  #   - +ArgumentError+ -> if input is not in the format "V X Y1 Y2 C", where
+  #   - +InvalidCommandError+ -> if input is not in the format "V X Y1 Y2 C", where
   #                         X, Y1, Y2 are integers, C is an uppercase character
   #
   def draw_vertical_segment(split_input)
@@ -198,7 +198,7 @@ class InputParse
   # * *Args*    :
   #   - +split_input+ -> array of strings
   # * *Raises* :
-  #   - +ArgumentError+ -> if input is not in the format "H X1 X2 Y C ", where
+  #   - +InvalidCommandError+ -> if input is not in the format "H X1 X2 Y C ", where
   #                         X, Y1, Y2 are integers, C is an uppercase character
   #
   def draw_horizontal_segment(split_input)
@@ -219,7 +219,7 @@ class InputParse
   # * *Args*    :
   #   - +split_input+ -> array of strings
   # * *Raises* :
-  #   - +ArgumentError+ -> if input is not in the format "S"
+  #   - +InvalidCommandError+ -> if input is not in the format "S"
   #
   def show(split_input)
     begin
