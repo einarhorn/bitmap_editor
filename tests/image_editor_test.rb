@@ -11,6 +11,7 @@ require "test/unit"
 # in full here.
 # The new methods that are tested in full here:
 #   has_image?
+#   clear_image
 #   draw_vertical_segment
 #   draw_horizontal_segment
 #   
@@ -96,6 +97,31 @@ class TestImageEditor < Test::Unit::TestCase
     editor = ImageEditor.new()
     assert_raise(MissingImageError) do
       editor.imageGrid
+    end
+  end
+
+  # Tests: clear_image
+
+  def test_clear_image_successful
+    editor = ImageEditor.new()
+    editor.create_image(5,5)
+    editor.color_pixel(2, 2, 'A')
+    editor.color_pixel(1, 1, 'A')
+    editor.clear_image()
+    expected_img_grid = Array[
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O']
+    ]
+    assert_equal(expected_img_grid, editor.imageGrid)
+  end
+
+  def test_clear_image_throws_on_missing_image
+    editor = ImageEditor.new()
+    assert_raise(MissingImageError) do
+      editor.clear_image()
     end
   end
 

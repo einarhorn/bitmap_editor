@@ -70,6 +70,16 @@ class ImageEditor
     @image.imageGrid
   end
   
+  # Clear the current image, resetting all elements to 'O'
+  #
+  # * *Raises* :
+  #   - +MissingImageError+ -> if no image is associated with this image editor
+  #
+  def clear_image()
+    raise MissingImageError if !has_image?()
+    create_image(rows, cols)
+  end
+  
   # Color a specific pixel (row,col) with a color
   #
   # * *Args*    :
