@@ -42,7 +42,7 @@ class ImageEditor
   #   - +MissingImageError+ -> if no image is associated with this image editor
   #
   def rows()
-    raise MissingImageError if !has_image?()
+    validate_editor_has_image()
     @image.rows
   end
 
@@ -54,7 +54,7 @@ class ImageEditor
   #   - +MissingImageError+ -> if no image is associated with this image editor
   #
   def cols()
-    raise MissingImageError if !has_image?()
+    validate_editor_has_image()
     @image.cols
   end
 
@@ -66,7 +66,7 @@ class ImageEditor
   #   - +MissingImageError+ -> if no image is associated with this image editor
   #
   def imageGrid()
-    raise MissingImageError if !has_image?()
+    validate_editor_has_image()
     @image.imageGrid
   end
   
@@ -76,10 +76,10 @@ class ImageEditor
   #   - +MissingImageError+ -> if no image is associated with this image editor
   #
   def clear_image()
-    raise MissingImageError if !has_image?()
+    validate_editor_has_image()
     create_image(rows, cols)
   end
-  
+
   # Color a specific pixel (row,col) with a color
   #
   # * *Args*    :
@@ -92,7 +92,7 @@ class ImageEditor
   #   - +ArgumentError+ -> if the provided `color` variable is not an uppercase character
   #
   def color_pixel(row, col, color)
-    raise MissingImageError if !has_image?()
+    validate_editor_has_image()
     @image.set_pixel(row, col, color)
   end
 
@@ -108,7 +108,7 @@ class ImageEditor
   #   - +IndexError+ -> if either row or col is out of the bounds of the image
   #
   def get_pixel(row, col)
-    raise MissingImageError if !has_image?()
+    validate_editor_has_image()
     @image.get_pixel(row, col)
   end
 
@@ -126,7 +126,7 @@ class ImageEditor
   #   - +ArgumentError+ -> if the starting row of the segnment is greater than the ending row
   #
   def draw_vertical_segment(col, rowStart, rowEnd, color)
-    raise MissingImageError if !has_image?()
+    validate_editor_has_image()
     raise ArgumentError, INVALID_ROW_START_END_ORDER_ERR_MSG if rowStart > rowEnd
     
     # Convert start and end values to a continuous array
@@ -153,7 +153,7 @@ class ImageEditor
   #   - +ArgumentError+ -> if the starting column of the segnment is greater than the ending column
   #
   def draw_horizontal_segment(row, colStart, colEnd, color)
-    raise MissingImageError if !has_image?()
+    validate_editor_has_image()
     raise ArgumentError, INVALID_COL_START_END_ORDER_ERR_MSG if colStart > colEnd
 
     # Convert start and end values to a continuous array
@@ -172,10 +172,18 @@ class ImageEditor
   #   - +MissingImageError+ -> if no image is associated with this image editor
   #
   def show()
-    raise MissingImageError if !has_image?()
+    validate_editor_has_image()
     @image.show()
   end
 
+  # Validate that editor instance has an image associated with it
+  #
+  # * *Raises* :
+  #   - +MissingImageError+ -> if no image is associated with this image editor
+  #
+  def validate_editor_has_image
+    raise MissingImageError if !has_image?()
+  end
 
 
 end
