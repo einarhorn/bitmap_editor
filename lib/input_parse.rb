@@ -101,8 +101,8 @@ class InputParse
   #
   def color_pixel(split_input)
     raise ArgumentError if split_input.length != 4
-    row = Integer(split_input[1])
-    col = Integer(split_input[2])
+    col = Integer(split_input[1])
+    row = Integer(split_input[2])
     color = split_input[3]
     @editor.color_pixel(row, col, color)
   end

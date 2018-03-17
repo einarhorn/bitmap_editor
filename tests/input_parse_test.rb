@@ -85,9 +85,9 @@ class TestInputParse < Test::Unit::TestCase
 
     # ..but the image has not been reset (Line 4 and 5 in input color the image)
     expected_img_grid = Array[
-      ['O', 'A', 'O', 'O', 'O'],
-      ['O', 'O', 'A', 'O', 'O'],
       ['O', 'O', 'O', 'O', 'O'],
+      ['A', 'O', 'O', 'O', 'O'],
+      ['O', 'A', 'O', 'O', 'O'],
       ['O', 'O', 'O', 'O', 'O'],
       ['O', 'O', 'O', 'O', 'O']
     ]
