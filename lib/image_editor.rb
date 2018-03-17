@@ -176,6 +176,8 @@ class ImageEditor
     @image.show()
   end
 
+  private 
+  
   # Validate that editor instance has an image associated with it
   #
   # * *Raises* :
