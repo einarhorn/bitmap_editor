@@ -34,6 +34,8 @@ class TestInputParse < Test::Unit::TestCase
   end
 
   # Test file has the instruction:
+  #   I
+  #   I 1
   #   IM 1 2
   #   I 1a 2
   #   I 1 c
@@ -49,19 +51,21 @@ class TestInputParse < Test::Unit::TestCase
     assert_equal(false, parser.editor.has_image?())
   end
   
+  # Test file has the instruction:
+  #   I 5 5
+  #   L 2 2 A
   def test_color_pixel_successful
     parser = InputParse.new()
     parser.run("tests/test_files/color_pixel_valid.txt")
     assert_equal(true, parser.editor.has_image?())
-
-    # Test file has the instruction:
-    #   I 5 5
-    #   L 2 2 A
     assert_equal('A', parser.editor.get_pixel(2, 2))
   end
 
   # Test file has the instruction:
   #   I 5 5
+  #   L
+  #   L 1
+  #   L 1 2
   #   La 2 2 A
   #   L 2a 2 A
   #   L 2 2a A
@@ -77,8 +81,54 @@ class TestInputParse < Test::Unit::TestCase
     # Image is successfully created..
     assert_equal(true, parser.editor.has_image?())
 
-    # ..but none of the pixels have been changed
+    # ..but none of the pixels should have been changed
     assert_equal('O', parser.editor.get_pixel(2, 2))
+  end
+
+  # Test file has the instruction:
+  #   I 5 5
+  #   V 2 1 4 A
+  def test_draw_vertical_segment_successful
+    parser = InputParse.new()
+    parser.run("tests/test_files/draw_vertical_segment_valid.txt")
+    assert_equal(true, parser.editor.has_image?())
+    assert_equal('A', parser.editor.get_pixel(1, 2))
+    assert_equal('A', parser.editor.get_pixel(2, 2))
+    assert_equal('A', parser.editor.get_pixel(3, 2))
+    assert_equal('A', parser.editor.get_pixel(4, 2))
+  end
+
+  # Test file has the instruction:
+  #    I 5 5
+  #    V
+  #    V 1
+  #    V 1 2
+  #    V 1 2 3
+  #    Va 1 2 3 A
+  #    V 1a 2 3 A
+  #    V 1 2a 3 A
+  #    V 1 2 3a A
+  #    V 1 2 3 Aa
+  #    V 1 2 3 1
+  #    V 1 2 3 A a
+  #    V 1 2 3 A 1
+  #    V 7 2 3 A
+  def test_draw_vertical_segment_fails_on_invalid_input
+    parser = InputParse.new()
+    parser.run("tests/test_files/draw_vertical_segment_invalid.txt")
+    
+    # Image is successfully created..
+    assert_equal(true, parser.editor.has_image?())
+
+    # ..but none of the pixels have been changed
+    expected_img_grid = Array[
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'O', 'O', 'O', 'O']
+    ]
+    assert_equal(expected_img_grid, parser.editor.imageGrid)
   end
 
 end

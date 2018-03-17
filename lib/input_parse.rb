@@ -27,7 +27,7 @@ class InputParse
       
       begin
         execute_line(split_line)
-      rescue ArgumentError => e
+      rescue ArgumentError, IndexError => e
         puts e.message
       end
 
@@ -49,6 +49,7 @@ class InputParse
       color_pixel(split_input)
     when 'V'
       puts 'Vertical'
+      draw_vertical_segment(split_input)
     when 'H'
       puts 'Horizontal'
     when 'S'
@@ -85,9 +86,27 @@ class InputParse
     raise ArgumentError if split_input.length != 4
     row = Integer(split_input[1])
     col = Integer(split_input[2])
-    color = String(split_input[3])
+    color = split_input[3]
     @editor.color_pixel(row, col, color)
   end
+
+  # Draw a vertical segment of colour C in column X between rows Y1 and Y2 (inclusive).
+  #
+  # * *Args*    :
+  #   - +split_input+ -> array of strings
+  # * *Raises* :
+  #   - +ArgumentError+ -> if input is not in the format "V X Y1 Y2 C", where
+  #                         X, Y1, Y2 are integers, C is an uppercase character
+  #
+  def draw_vertical_segment(split_input)
+    raise ArgumentError if split_input.length != 5
+    col = Integer(split_input[1])
+    rowStart = Integer(split_input[2])
+    rowEnd = Integer(split_input[3])
+    color = split_input[4]
+    @editor.draw_vertical_segment(col, rowStart, rowEnd, color)
+  end
+
 
 
 end
