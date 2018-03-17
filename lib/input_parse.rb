@@ -7,9 +7,47 @@ require_relative "exceptions/invalid_command_error"
 # and does not do any validation of values.
 class InputParse
 
-  # Constants
+  # Error messages
   INCORRECT_NUMBER_OF_ARGS_ERR_MSG = "Incorrect number of arguments"
   INVALID_FILE_ERR_MSG = "Please provide correct file"
+
+  # Create Image
+  CREATE_IMG_COMMAND = 'I'
+  CREATE_IMG_PARAM_COUNT = 3
+  CREATE_IMG_PARAM_COLS_IDX = 1
+  CREATE_IMG_PARAM_ROWS_IDX = 2
+
+  # Clear image
+  CLEAR_IMG_COMMAND = 'C'
+  CLEAR_IMG_PARAM_COUNT = 1
+
+  # Colour pixel
+  COLOUR_PIXEL_COMMAND = 'L'
+  COLOUR_PIXEL_PARAM_COUNT = 4
+  COLOUR_PIXEL_PARAM_COL_IDX = 1
+  COLOUR_PIXEL_PARAM_ROW_IDX = 2
+  COLOUR_PIXEL_PARAM_COLOR_IDX = 3
+
+  # Draw vertical segment
+  DRAW_VERTICAL_COMMAND = 'V'
+  DRAW_VERTICAL_PARAM_COUNT = 5
+  DRAW_VERTICAL_COL_IDX = 1
+  DRAW_VERTICAL_ROW_START_IDX = 2
+  DRAW_VERTICAL_ROW_END_IDX = 3
+  DRAW_VERTICAL_COLOR_IDX = 4
+
+  # Draw horizontal segment
+  DRAW_HORIZONTAL_COMMAND = 'H'
+  DRAW_HORIZONTAL_PARAM_COUNT = 5
+  DRAW_HORIZONTAL_ROW_IDX = 3
+  DRAW_HORIZONTAL_COL_START_IDX = 1
+  DRAW_HORIZONTAL_COL_END_IDX = 2
+  DRAW_HORIZONTAL_COLOR_IDX = 4
+
+  # Show
+  SHOW_COMMAND = 'S'
+  SHOW_COMMAND_PARAM_COUNT = 1
+
 
   # For testing purposes, we make the image editor accessible
   attr_reader :editor
@@ -60,17 +98,17 @@ class InputParse
   #
   def execute_line(split_input)
     case split_input[0]
-    when 'I'
+    when CREATE_IMG_COMMAND
       create_image(split_input)
-    when 'C'
+    when CLEAR_IMG_COMMAND
       clear_image(split_input)
-    when 'L'
+    when COLOUR_PIXEL_COMMAND
       color_pixel(split_input)
-    when 'V'
+    when DRAW_VERTICAL_COMMAND
       draw_vertical_segment(split_input)
-    when 'H'
+    when DRAW_HORIZONTAL_COMMAND
       draw_horizontal_segment(split_input)
-    when 'S'
+    when SHOW_COMMAND
       show(split_input)
     else
       raise UnrecognisedCommandError
@@ -89,16 +127,16 @@ class InputParse
   #
   def create_image(split_input)
     begin
-      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != 3
-      cols = Integer(split_input[1])
-      rows = Integer(split_input[2])
+      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != CREATE_IMG_PARAM_COUNT
+      cols = Integer(split_input[CREATE_IMG_PARAM_COLS_IDX])
+      rows = Integer(split_input[CREATE_IMG_PARAM_ROWS_IDX])
       @editor.create_image(rows, cols)
     rescue ArgumentError => e
       raise InvalidCommandError, e.message
     end
   end
 
-  # Clears the table, setting all pixels to white (O).
+  # Clears the image, setting all pixels to white (O).
   #
   # * *Args*    :
   #   - +split_input+ -> array of strings
@@ -107,7 +145,7 @@ class InputParse
   #
   def clear_image(split_input)
     begin
-      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != 1
+      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != CLEAR_IMG_PARAM_COUNT
       @editor.clear_image()
     rescue ArgumentError, MissingImageError => e
       raise InvalidCommandError, e.message
@@ -124,10 +162,10 @@ class InputParse
   #
   def color_pixel(split_input)
     begin
-      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != 4
-      col = Integer(split_input[1])
-      row = Integer(split_input[2])
-      color = split_input[3]
+      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != COLOUR_PIXEL_PARAM_COUNT
+      col = Integer(split_input[COLOUR_PIXEL_PARAM_COL_IDX])
+      row = Integer(split_input[COLOUR_PIXEL_PARAM_ROW_IDX])
+      color = split_input[COLOUR_PIXEL_PARAM_COLOR_IDX]
       @editor.color_pixel(row, col, color)
     rescue ArgumentError, MissingImageError, IndexError => e
       raise InvalidCommandError, e.message
@@ -144,11 +182,11 @@ class InputParse
   #
   def draw_vertical_segment(split_input)
     begin
-      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != 5
-      col = Integer(split_input[1])
-      rowStart = Integer(split_input[2])
-      rowEnd = Integer(split_input[3])
-      color = split_input[4]
+      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != DRAW_VERTICAL_PARAM_COUNT
+      col = Integer(split_input[DRAW_VERTICAL_COL_IDX])
+      rowStart = Integer(split_input[DRAW_VERTICAL_ROW_START_IDX])
+      rowEnd = Integer(split_input[DRAW_VERTICAL_ROW_END_IDX])
+      color = split_input[DRAW_VERTICAL_COLOR_IDX]
       @editor.draw_vertical_segment(col, rowStart, rowEnd, color)
     rescue ArgumentError, MissingImageError, IndexError => e
       raise InvalidCommandError, e.message
@@ -165,11 +203,11 @@ class InputParse
   #
   def draw_horizontal_segment(split_input)
     begin
-      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != 5
-      colStart = Integer(split_input[1])
-      colEnd = Integer(split_input[2])
-      row = Integer(split_input[3])
-      color = split_input[4]
+      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != DRAW_HORIZONTAL_PARAM_COUNT
+      colStart = Integer(split_input[DRAW_HORIZONTAL_COL_START_IDX])
+      colEnd = Integer(split_input[DRAW_HORIZONTAL_COL_END_IDX])
+      row = Integer(split_input[DRAW_HORIZONTAL_ROW_IDX])
+      color = split_input[DRAW_HORIZONTAL_COLOR_IDX]
       @editor.draw_horizontal_segment(row, colStart, colEnd, color)
     rescue ArgumentError, MissingImageError, IndexError => e
       raise InvalidCommandError, e.message
@@ -185,7 +223,7 @@ class InputParse
   #
   def show(split_input)
     begin
-      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != 1
+      raise ArgumentError, INCORRECT_NUMBER_OF_ARGS_ERR_MSG if split_input.length != SHOW_COMMAND_PARAM_COUNT
       @editor.show()
     rescue ArgumentError, MissingImageError => e
       raise InvalidCommandError, e.message
