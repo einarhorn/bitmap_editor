@@ -52,9 +52,6 @@ class InputParse
   SHOW_COMMAND_PARAM_COUNT = 1
 
 
-  # For testing purposes, we make the image editor accessible
-  attr_reader :editor
-
   # Executes a text file, which contains a list of commands
   #
   # * *Args*    :
