@@ -23,20 +23,21 @@ Tests are run by `rspec`.
 
 # Example
 To run the application you must supply a command file like so `bin/bitmap_editor examples/show.txt`
+
 Input File:
 
-`I 5 6` 
-`L 1 3 A` 
-`V 2 3 6 W` 
-`H 3 5 2 Z` 
-`S`
+`I 5 6`  
+`L 1 3 A`  
+`V 2 3 6 W`  
+`H 3 5 2 Z`  
+`S`  
 
 
 Expected Output:
 
-`OOOOO` 
-`OOZZZ` 
-`AWOOO` 
-`OWOOO` 
-`OWOOO` 
-`OWOOO` 
+`OOOOO`  
+`OOZZZ`  
+`AWOOO`  
+`OWOOO`  
+`OWOOO`  
+`OWOOO`  
